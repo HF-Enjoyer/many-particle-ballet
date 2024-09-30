@@ -3,7 +3,7 @@
 Special thanks to my dearest friend Iaroslav Kutuzov (as known as Kusoslaw Intheforest).
 
 Metropolis algorithm and pairwise potential by *Ilya Mikhailov*.
-Temperature, RDF plot, average distance calculation, many bug fixes and valuable advise by *Iaroslav Kutuzov*.
+Temperature, RDF plot, average distance calculation, many bug fixes and valuable advices by *Iaroslav Kutuzov*.
 
 ## How to use this code
 
