@@ -76,10 +76,11 @@ def pot_calc(parts, potential):
             if i == j:
                 c.append(0)
             else:
+                distance = dist(parts[i], parts[j])
                 if potential == 'inverse':
-                    c.append(-1/dist(parts[i], parts[j]))
+                    c.append(-1/distance)
                 elif potential == 'LJ':
-                    c.append(4*epsilon*(np.power((sigma/dist(parts[i],parts[j])),12) - np.power((sigma/dist(parts[i],parts[j])),6)))
+                    c.append(4*epsilon*(np.power((sigma/distance),12) - np.power((sigma/distance),6)))
         a.append(c)
     pot = np.sum(np.array(a))/2
     return pot
