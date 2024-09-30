@@ -15,14 +15,13 @@ if __name__ == '__main__':
     iterations = get_info(filename)['iterations'] # number of iterations (test)
     shp = get_info(filename)['size'] # shape of the lattice
     Parts_num = get_info(filename)['N'] # number of particles
-    Temp = get_info(filename)['temp']
+    Temp = get_info(filename)['temp'] # temperature
+    potential = get_info(filename)['potential'] # type of potential
+    particles_init = get_info(filename)['configuration'] # initial configuration of the particles
+    print('Starting energy', pot_calc(particles_init, potential), '\n')
 
-    particles_init = get_info(filename)['configuration']
-    print('Starting energy', pot_calc(particles_init), '\n')
-    # coords_path = []
     particle_distance = []
     part_now = particles_init
-    # coords_path.append(particles_init)
     i = 0
     energy_arr = []
 
@@ -33,22 +32,22 @@ if __name__ == '__main__':
         while i <= iterations:
             i += 1
             part_rand = randomize_1particle(part_now, shp, Parts_num)
-            if jump_estimator(part_now, part_rand, Temp) == True:
-                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand)} \nJUMP? {jump_estimator(part_now, part_rand, Temp)} \n')
+            if jump_estimator(part_now, part_rand, Temp, potential) == True:
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
                 # part_now = part_rand
                 part_inter = smart_randomizer(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
-                if jump_estimator(part_rand, part_inter, Temp) == True:
-                    outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp)} \n')
+                if jump_estimator(part_rand, part_inter, Temp, potential) == True:
+                    outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter, potential)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp, potential)} \n')
                     part_now = part_inter
                 else:
                     part_now = part_rand
             else:
-                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand)} \nJUMP? {jump_estimator(part_now, part_rand, Temp)} \n')
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
             particle_distance.append(avg_distance(part_now))
-            energy_arr.append(pot_calc(part_now)) 
+            energy_arr.append(pot_calc(part_now, potential)) 
 
             # coords_path.append(part_now)
-    print('Final Energy', pot_calc(part_now), '\n')
+    print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
 
     fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)

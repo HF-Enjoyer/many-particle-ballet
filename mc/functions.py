@@ -14,17 +14,19 @@ def get_info(filename: str):
     grid_size = int(info[1].split()[1]) # number of points in lattice
     iterations = int(info[2].split()[1]) # number of iterations
     temp = float(info[3].split()[1]) # dimensionless
+    potential = (info[4].split()[1]) #type of potential LJ or inverse
     coords = {}
-    if info[5] == 'random':
+    if info[6] == 'random':
         coords = smart_randomizer(Np, grid_size)
     else:
-        for i in info[5:-1]:
+        for i in info[6:-1]:
             coords[i.split()[0]] = (int(i.split()[1]), int(i.split()[2]))
     return {'N': Np, 
             'size': grid_size, 
             'iterations': iterations, 
             'temp': temp,
-            'configuration': coords}
+            'configuration': coords,
+            'potential':potential}
     
 def smart_randomizer(parts_num, Shape: int): # randomly generate configuration of parts_num particles
     coords = set()
@@ -64,28 +66,33 @@ def avg_distance(parts):
     avg_len = sum_len/len(a)
     return avg_len
 
-def pot_calc(parts):
-    a = [] # matrix of inverse distances of old configuration
+def pot_calc(parts, potential):
+    a = [] 
+    sigma = 0.890899
+    epsilon = 1
     for i in parts:
         c = [] # generate an empty list to append it to a after filling
         for j in parts:
             if i == j:
                 c.append(0)
             else:
-                c.append(1/dist(parts[i], parts[j]))
+                if potential == 'inverse':
+                    c.append(-1/dist(parts[i], parts[j]))
+                elif potential == 'LJ':
+                    c.append(4*epsilon*(np.power((sigma/dist(parts[i],parts[j])),12) - np.power((sigma/dist(parts[i],parts[j])),6)))
         a.append(c)
     pot = np.sum(np.array(a))/2
-    return pot*(-1)
+    return pot
 
-def jump_estimator(parts1, parts2, Temp):
+def jump_estimator(parts1, parts2, Temp, potential):
     # deltaE = pot_calc(parts2) - pot_calc(parts1)
     if Temp == 0:
-        if (pot_calc(parts2)-pot_calc(parts1)) < 0:
+        if (pot_calc(parts2, potential)-pot_calc(parts1, potential)) < 0:
             return True
         else: 
             return False
     else:
-        Prob = np.exp((pot_calc(parts1)-pot_calc(parts2))/Temp)
+        Prob = np.exp((pot_calc(parts1, potential)-pot_calc(parts2, potential))/Temp)
         u = random.uniform(0,1)
         if u <= Prob:
             return True

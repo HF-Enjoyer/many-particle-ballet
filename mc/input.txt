@@ -1,7 +1,8 @@
-N: 20
+N: 25
 grid_size: 10
-iterations: 5000
-temperature(K): 5 # 0 is recommended in case of small N otherwise it will fluctuate noisily
+iterations: 1000
+temperature(K): 0 # 0 is recommended in case of small N otherwise it will fluctuate noisily
+potential: LJ # can now be LJ (Lennard-Jones), inverse (1/r)
 initial_coordinates: # leave 'random' in the next line if you want random configuration otherwise insert in manually
 random
 # do not leave empty lines!
