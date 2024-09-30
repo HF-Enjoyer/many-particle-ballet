@@ -1,0 +1,7 @@
+N: 20
+grid_size: 10
+iterations: 5000
+temperature(K): 5 # 0 is recommended in case of small N otherwise it will fluctuate noisily
+initial_coordinates: # leave 'random' in the next line if you want random configuration otherwise insert in manually
+random
+# do not leave empty lines!
