@@ -3,6 +3,7 @@ import numpy as np
 import random
 from matplotlib import pyplot as plt
 from math import exp as exp
+import sys
 # Functions
 
 def get_info(filename: str):
@@ -127,4 +128,19 @@ def Average_value(A_arr, E_arr, T):
     A_avg = A_avg/weights_sum
     return A_avg
 
-        
+def print_progress_bar(iteration, total, length=50):
+    """
+    Print iterations progress.
+    
+    Args:
+    iteration (int): Current iteration.
+    total (int): Total iterations.
+    length (int): Character length of the progress bar.
+    """
+    percent = ("{0:.1f}").format(100 * (iteration / float(total)))  # Calculate percentage
+    filled_length = int(length * iteration // total)  # Calculate filled part of the bar
+    bar = '█' * filled_length + '-' * (length - filled_length)  # Create bar with '█' and '-'
+    sys.stdout.write(f'\r|{bar}| {round(float(percent))}% Completed')
+    sys.stdout.flush()
+    # if iteration == total: 
+    #     print()  # Print a new line on completion

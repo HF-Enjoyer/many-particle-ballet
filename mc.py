@@ -45,8 +45,12 @@ if __name__ == '__main__':
                 outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
             particle_distance.append(avg_distance(part_now))
             energy_arr.append(pot_calc(part_now, potential)) 
-
+            # if i%50 == 0:
+            #     sys.stdout.write(f"\rProgress: {i}/{iterations} iterations completed.")
+            #     sys.stdout.flush()
+            print_progress_bar(i, iterations)
             # coords_path.append(part_now)
+    print('\n')
     print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
 
