@@ -28,24 +28,29 @@ if __name__ == '__main__':
 
     # something like monte carlo 
 
+    print('iterations',iterations)
 
     while i <= iterations:
         i += 1
         part_rand = randomize_1particle(part_now, shp, Parts_num)
         if jump_estimator(part_now, part_rand, Temp, potential) == True:
+            # part_now = part_rand
             part_inter = smart_randomizer(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
             if jump_estimator(part_rand, part_inter, Temp, potential) == True:
-                
                 part_now = part_inter
             else:
                 part_now = part_rand
+  
         particle_distance.append(avg_distance(part_now))
         energy_arr.append(pot_calc(part_now, potential)) 
+        print('step: ',i)
 
-            # coords_path.append(part_now)
+
+
     print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
-
-    avg_distance_tot = Average_value(particle_distance[1500:], energy_arr[1500:], Temp)
     print('Temp: ', Temp)
+    print(len(particle_distance),len(energy_arr))
+    avg_distance_tot = Average_value(particle_distance[100:], energy_arr[100:], Temp)
+
     print(avg_distance_tot)

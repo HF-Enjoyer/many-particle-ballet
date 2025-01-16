@@ -2,3 +2,9 @@
 __pycache__/
 #text files
 input.txt
+input.txt.out
+#images
+before-after.png
+energy.png
+part_distance.png
+RDF.png
