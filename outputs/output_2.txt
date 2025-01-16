@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "C:\Users\Yaroslav Kutuzov\Desktop\быртр\scripts\2D particle ballet Ilia\meltdown.py", line 12, in <module>
+    filename = Path(__file__).with_name(sys.argv[1])
+  File "C:\Program Files\Python310\lib\pathlib.py", line 762, in with_name
+    raise ValueError("Invalid name %r" % (name))
+ValueError: Invalid name 'C:\\Users\\Yaroslav Kutuzov\\Desktop\\быртр\\scripts\\2D particle ballet Ilia\\inputs\\input_2.txt'

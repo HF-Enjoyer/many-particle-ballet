@@ -1,0 +1,6 @@
+N: 20
+grid_size: 10
+iterations: 15000
+temperature(K): 0.63
+potential: inverse
+initial_coordinates: random

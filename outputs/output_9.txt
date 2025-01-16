@@ -1,0 +1,30 @@
+Traceback (most recent call last):
+  File "C:\Users\Yaroslav Kutuzov\Desktop\быртр\scripts\2D particle ballet Ilia\meltdown.py", line 1, in <module>
+    from functions import *
+  File "C:\Users\Yaroslav Kutuzov\Desktop\быртр\scripts\2D particle ballet Ilia\functions.py", line 4, in <module>
+    from matplotlib import pyplot as plt
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\pyplot.py", line 57, in <module>
+    from matplotlib.figure import Figure, figaspect
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\figure.py", line 25, in <module>
+    from matplotlib import _blocking_input, docstring, projections
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\projections\__init__.py", line 58, in <module>
+    from mpl_toolkits.mplot3d import Axes3D
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\mpl_toolkits\mplot3d\__init__.py", line 1, in <module>
+    from .axes3d import Axes3D
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\mpl_toolkits\mplot3d\axes3d.py", line 39, in <module>
+    from . import art3d
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\mpl_toolkits\mplot3d\art3d.py", line 677, in <module>
+    class Poly3DCollection(PolyCollection):
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\artist.py", line 119, in __init_subclass__
+    cls._update_set_signature_and_docstring()
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\artist.py", line 140, in _update_set_signature_and_docstring
+    for prop in ArtistInspector(cls).get_setters()
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\artist.py", line 1436, in get_setters
+    or self.is_alias(func)):
+  File "C:\Users\Yaroslav Kutuzov\AppData\Roaming\Python\Python310\site-packages\matplotlib\artist.py", line 1443, in is_alias
+    ds = inspect.getdoc(o)
+  File "C:\Program Files\Python310\lib\inspect.py", line 742, in getdoc
+    return cleandoc(doc)
+  File "C:\Program Files\Python310\lib\inspect.py", line 771, in cleandoc
+    return '\n'.join(lines)
+KeyboardInterrupt

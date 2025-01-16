@@ -6,9 +6,9 @@ from pathlib import Path
 import sys
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print('Usage: python mc.py <inp filename>')
-    print('Starting 2D Monte Carlo')
+    # if len(sys.argv) != 2:
+        # print('Usage: python mc.py <inp filename>')
+    # print('Starting 2D Monte Carlo')
     filename = Path(__file__).with_name(sys.argv[1])
 
     iterations = get_info(filename)['iterations'] # number of iterations (test)
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     Temp = get_info(filename)['temp']
     potential = get_info(filename)['potential']
     particles_init = get_info(filename)['configuration']
-    print('Starting energy', pot_calc(particles_init, potential), '\n')
+    # print('Starting energy', pot_calc(particles_init, potential), '\n')
     
     # coords_path = []
     particle_distance = []
@@ -27,8 +27,6 @@ if __name__ == '__main__':
     energy_arr = []
 
     # something like monte carlo 
-
-    print('iterations',iterations)
 
     while i <= iterations:
         i += 1
@@ -43,14 +41,13 @@ if __name__ == '__main__':
   
         particle_distance.append(avg_distance(part_now))
         energy_arr.append(pot_calc(part_now, potential)) 
-        print('step: ',i)
 
 
 
-    print('Final Energy', pot_calc(part_now, potential), '\n')
-    print('Montecarlo-ed!')
+    # print('Final Energy', pot_calc(part_now, potential), '\n')
+    # print('Montecarlo-ed!')
     print('Temp: ', Temp)
-    print(len(particle_distance),len(energy_arr))
-    avg_distance_tot = Average_value(particle_distance[100:], energy_arr[100:], Temp)
+    # print(len(particle_distance),len(energy_arr))
+    avg_distance_tot = Average_value(particle_distance[1500:], energy_arr[1500:], Temp)
 
     print(avg_distance_tot)
