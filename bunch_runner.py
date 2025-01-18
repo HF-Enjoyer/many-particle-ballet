@@ -1,42 +1,65 @@
 import os
 import subprocess
+import time
 
-# Parameters for the input file
+# Path to the input file
+input_file = "input.txt"
+
+# Path to the consolidated output file
+output_file = "simulation_results_LJ.csv"
+
+# Base parameters for the input file
 base_input = {
     "N": 20,
     "grid_size": 10,
     "iterations": 15000,
     "temperature(K)": 0,  # This will be updated for each simulation
-    "potential": "inverse",
+    "potential": "LJ",
     "initial_coordinates": "random",
 }
 
-# Directories for inputs and outputs
-input_dir = os.path.abspath("inputs")
-output_dir = os.path.abspath("outputs")
-os.makedirs(input_dir, exist_ok=True)
-os.makedirs(output_dir, exist_ok=True)
+# Adjustable temperature range and step size
+temperature_min = 0  # Minimum temperature
+temperature_max = 4  # Maximum temperature
+temperature_step = 0.1  # Step size for temperature
 
-# Range of temperatures (0 to 4 inclusive, with 20 steps)
-temperatures = [round(t, 2) for t in [i * 4 / 19 for i in range(20)]]
+# Generate the range of temperatures
+temperatures = [round(t, 2) for t in 
+                [temperature_min + i * temperature_step for i in range(int((temperature_max - temperature_min) / temperature_step) + 1)]]
 
+# Initialize the output file with headers
+with open(output_file, "w") as outfile:
+    outfile.write("T,d,F\n")  # CSV header
+t0 = time.time()
 # Run simulations
 for i, temp in enumerate(temperatures):
     # Update temperature in the base input
     base_input["temperature(K)"] = temp
 
-    # Create input file
-    input_filename = os.path.join(input_dir, f"input_{i}.txt")
-    with open(input_filename, "w") as file:
+    # Overwrite the input file with updated parameters
+    with open(input_file, "w") as file:
         for key, value in base_input.items():
-            file.write(f"{key}: {value}\n")
+            if key == "initial_coordinates":
+                file.write(f"{key}:\n{value}\n")  # Place "random" on the next line
+            else:
+                file.write(f"{key}: {value}\n")
 
-    # Define output file
-    output_filename = os.path.join(output_dir, f"output_{i}.txt")
-
-    # Run simulation and save output
+    # Capture simulation output
     print(f"Running simulation {i + 1} for temperature {temp} K...")
-    with open(output_filename, "w") as outfile:
-        subprocess.run(["py", "meltdown.py", input_filename], stdout=outfile, stderr=subprocess.STDOUT)
+    process = subprocess.run(
+        ["py", "meltdown.py", input_file],
+        capture_output=True,
+        text=True,
+    )
+    
+    # Parse the simulation output
+    output_lines = process.stdout.splitlines()
+    line1 = output_lines[0] if len(output_lines) > 0 else "N/A"
+    line2 = output_lines[1] if len(output_lines) > 1 else "N/A"
 
-print("All simulations completed. Outputs saved to the 'outputs' directory.")
+    # Append results to the CSV
+    with open(output_file, "a") as outfile:
+        outfile.write(f"{temp},{line1},{line2}\n")
+t1 = time.time()
+print(f"All simulations completed. Results saved to '{output_file}'.")
+print('time running: ',t1-t0)

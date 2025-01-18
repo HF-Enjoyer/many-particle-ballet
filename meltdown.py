@@ -46,8 +46,8 @@ if __name__ == '__main__':
 
     # print('Final Energy', pot_calc(part_now, potential), '\n')
     # print('Montecarlo-ed!')
-    print('Temp: ', Temp)
     # print(len(particle_distance),len(energy_arr))
     avg_distance_tot = Average_value(particle_distance[1500:], energy_arr[1500:], Temp)
-
+    helmholtz = Helmholtz_free(energy_arr[1500:], Temp)
     print(avg_distance_tot)
+    print(helmholtz)

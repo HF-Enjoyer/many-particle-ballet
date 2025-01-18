@@ -128,6 +128,14 @@ def Average_value(A_arr, E_arr, T):
     A_avg = A_avg/weights_sum
     return A_avg
 
+def Helmholtz_free(E_arr,T):
+    if T != 0:
+        weights = [exp(-(E-min(E_arr))/T) for E in E_arr]
+    else:
+        weights = [1]*len(E_arr)
+    Z = sum(weights)
+    return -T*np.log(Z)
+    
 def print_progress_bar(iteration, total, length=50):
     """
     Print iterations progress.
