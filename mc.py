@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     # something like monte carlo 
 
-    with open(f'{sys.argv[1]}.out', 'w') as outfile:
+    with open(f'{sys.argv[1].split(".")[0]}_out.txt', 'w') as outfile:
         outfile.write(f'INITIAL: {particles_init} \n')
         while i <= iterations:
             i += 1
@@ -45,11 +45,8 @@ if __name__ == '__main__':
                 outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
             particle_distance.append(avg_distance(part_now))
             energy_arr.append(pot_calc(part_now, potential)) 
-            # if i%50 == 0:
-            #     sys.stdout.write(f"\rProgress: {i}/{iterations} iterations completed.")
-            #     sys.stdout.flush()
             print_progress_bar(i, iterations)
-            # coords_path.append(part_now)
+
     print('\n')
     print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
@@ -93,29 +90,6 @@ if __name__ == '__main__':
     #plt.show()
     plt.savefig('part_distance.png', dpi=300, bbox_inches="tight")
     plt.close()
-
-
-    # fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)
-    # c_1 = [] # generate an empty list to append it to after fillin
-
-    # for i in particles_init:
-    #     for j in particles_init:
-    #         if j > i:
-    #             c_1.append(dist(particles_init[i], particles_init[j]))
-    #         else:
-    #             continue
-    # ax[0].hist(c_1)
-
-    # c_2 = []
-    # for i in part_now:
-    #     for j in part_now:
-    #         if j > i:
-    #             c_2.append(dist(part_now[i], part_now[j]))
-    #         else:
-    #             continue
-    # ax[1].hist(c_2)
-    # plt.show()
-    # plt.close()
 
 
     rdf_1 = []
