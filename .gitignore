@@ -3,6 +3,8 @@ __pycache__/
 #text files
 input.txt
 input.txt.out
+melting_data.xlsx
+all_outputs.txt
 #images
 before-after.png
 energy.png
