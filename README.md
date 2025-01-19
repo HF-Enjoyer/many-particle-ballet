@@ -22,19 +22,27 @@ py mc.py input.txt
 2. Lattice size (basically all the coordinates) - don't set too much. 10-50 is OK.
 3. Iterations. After this number of iterations the code stops. I recommend using 1000-20000 depending on N.
 4. Temperature(K). In the scale of this code 0.1 is low and 5K is extremely high. 
-5. Potentials. Currently there are two to choose from: inverse (which is a gravitational-like potential) and Lennard-Jones (set in the way that he depth of the well $\varepsilon=-5.0$, the $\sigma$ parameter is set so as to have $r_{min}=2^{1/6}\sigma=1$). Can be called by the names `inverse` and `LJ`.
+5. Potentials. Currently there are two to choose from: inverse (which is a gravitational-like potential) and Lennard-Jones.
+    The latter is set in the way that the depth of the well $\varepsilon=-5.0$, the $\sigma$ parameter is set so as to have $r_{min}=2^{1/6}\sigma=1$. Can be called by the names `inverse` and `LJ`.
 6. Coordinates. In this version just leave `random`.
 
 ### Outputs and useful data 
 
-- In the output file (currently called **input.txt.out**) you can find every state along the path of the simulation stored in the following format:
+- In the output file (currently called **input_out.txt**) you can find every state along the path of the simulation stored in the following format:
 ```
-SHOOK: {'part1': (3, 1), 'part2': (9, 2), 'part3': (9, 5), 'part4': (9, 8), 'part5': (10, 3), 'part6': (10, 9), 'part7': (1, 6), 'part8': (2, 8), 'part9': (7, 7), 'part10': (4, 2), 'part11': (4, 8), 'part12': (3, 6), 'part13': (8, 5), 'part14': (9, 4), 'part15': (8, 8), 'part16': (1, 5), 'part17': (6, 1), 'part18': (2, 10), 'part19': (6, 10), 'part20': (4, 4), 'part21': (8, 4), 'part22': (9, 3), 'part23': (10, 1), 'part24': (6, 3), 'part25': (6, 9)} 
-ENERGY: -12.772163824882293 
-ACCEPT SHOOK? True 
-NEW: {'part1': (3, 1), 'part2': (9, 2), 'part3': (9, 5), 'part4': (9, 8), 'part5': (10, 3), 'part6': (10, 9), 'part7': (1, 6), 'part8': (2, 8), 'part9': (7, 7), 'part10': (4, 2), 'part11': (4, 8), 'part12': (3, 6), 'part13': (8, 5), 'part14': (9, 4), 'part15': (8, 8), 'part16': (1, 5), 'part17': (6, 1), 'part18': (2, 10), 'part19': (6, 10), 'part20': (4, 4), 'part21': (8, 4), 'part22': (9, 9), 'part23': (10, 1), 'part24': (6, 3), 'part25': (6, 9)} 
-ENERGY: -11.7148260020514 
+INITIAL: {'part1': (3, 1), 'part2': (9, 2), 'part3': (8, 3), 'part4': (10, 3), 'part5': (2, 5), 'part6': (2, 8), 'part7': (7, 10), 'part8': (6, 8), 'part9': (8, 5), 'part10': (9, 10), 'part11': (1, 5), 'part12': (7, 9), 'part13': (4, 1), 'part14': (3, 5), 'part15': (3, 8), 'part16': (5, 5), 'part17': (8, 7), 'part18': (10, 4), 'part19': (2, 3), 'part20': (2, 6)} 
+NEW: {'part1': (3, 1), 'part2': (9, 2), 'part3': (8, 3), 'part4': (10, 3), 'part5': (2, 5), 'part6': (2, 8), 'part7': (7, 10), 'part8': (6, 8), 'part9': (8, 5), 'part10': (9, 10), 'part11': (1, 5), 'part12': (7, 9), 'part13': (4, 1), 'part14': (3, 5), 'part15': (3, 8), 'part16': (5, 5), 'part17': (8, 7), 'part18': (10, 4), 'part19': (2, 3), 'part20': (10, 5)} 
+ENERGY: -8.20486765785515 
 JUMP? False 
+NEW: {'part1': (3, 1), 'part2': (9, 2), 'part3': (10, 8), 'part4': (10, 3), 'part5': (2, 5), 'part6': (2, 8), 'part7': (7, 10), 'part8': (6, 8), 'part9': (8, 5), 'part10': (9, 10), 'part11': (1, 5), 'part12': (7, 9), 'part13': (4, 1), 'part14': (3, 5), 'part15': (3, 8), 'part16': (5, 5), 'part17': (8, 7), 'part18': (10, 4), 'part19': (2, 3), 'part20': (2, 6)} 
+ENERGY: -8.376037727332575 
+JUMP? True 
+NEW: {'part1': (8, 9), 'part2': (9, 2), 'part3': (10, 8), 'part4': (10, 3), 'part5': (2, 5), 'part6': (2, 8), 'part7': (7, 10), 'part8': (6, 8), 'part9': (8, 5), 'part10': (9, 10), 'part11': (1, 5), 'part12': (7, 9), 'part13': (4, 1), 'part14': (3, 5), 'part15': (3, 8), 'part16': (5, 5), 'part17': (8, 7), 'part18': (10, 4), 'part19': (2, 3), 'part20': (2, 6)} 
+ENERGY: -8.891048243803478 
+JUMP? True 
+SHOOK: {'part1': (3, 7), 'part2': (9, 5), 'part3': (9, 8), 'part4': (10, 3), 'part5': (1, 6), 'part6': (2, 8), 'part7': (6, 5), 'part8': (4, 8), 'part9': (5, 9), 'part10': (9, 10), 'part11': (1, 2), 'part12': (2, 7), 'part13': (6, 10), 'part14': (9, 3), 'part15': (8, 1), 'part16': (10, 4), 'part17': (9, 6), 'part18': (2, 9), 'part19': (7, 2), 'part20': (6, 6)} 
+ENERGY: -9.244309838550498 
+ACCEPT SHOOK? True 
 ```
 - You can observe the changes in the positions of particles on the picture **before-after.png**. 
 - The program **mc.py** gathers data about the average distance between particles and stores it along with the energy of every step. They are then plotted on the graphs **part_distance.png** and **energy.png**.
