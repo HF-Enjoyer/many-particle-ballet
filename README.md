@@ -1,4 +1,4 @@
-# Many Particle Disco
+# Many Particle Disco 0.3.0
 
 Special thanks to my dearest friend Iaroslav Kutuzov (as known as Kusoslaw Intheforest).
 
