@@ -1,6 +1,6 @@
 # Many Particle Disco 0.5.0
 
-==NOW WITH POLYMERS!==
+> NOW WITH POLYMERS!
 
 Special thanks to my dearest friend Iaroslav Kutuzov (as known as Kusoslaw Intheforest).
 
