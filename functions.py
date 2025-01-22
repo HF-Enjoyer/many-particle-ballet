@@ -17,17 +17,22 @@ def get_info(filename: str):
     temp = float(info[3].split()[1]) # dimensionless
     potential = (info[4].split()[1]) #type of potential LJ or inverse
     coords = {}
-    if info[6] == 'random':
-        coords = smart_randomizer(Np, grid_size)
+    polymer_true = (info[5].split()[1]) # polymer or free particles
+    if polymer_true == 'True':
+        coords = generate_polymer_chain(Np, grid_size)
     else:
-        for i in info[6:-1]:
-            coords[i.split()[0]] = (int(i.split()[1]), int(i.split()[2]))
+        if info[7] == 'random':
+            coords = smart_randomizer(Np, grid_size)
+        else:
+            for i in info[6:-1]:
+                coords[i.split()[0]] = (int(i.split()[1]), int(i.split()[2]))
     return {'N': Np, 
             'size': grid_size, 
             'iterations': iterations, 
             'temp': temp,
             'configuration': coords,
-            'potential':potential}
+            'potential':potential,
+            'polymer':polymer_true}
     
 def smart_randomizer(parts_num, Shape: int): # randomly generate configuration of parts_num particles
     coords = set()
@@ -52,7 +57,68 @@ def randomize_1particle(parts_1: dict, Shape, N: int): # костыли... chang
     parts_2[f'part{num_part}'] = new_coords
     return parts_2
 
-def dist(part1, part2):  
+def generate_polymer_chain(length, lattice_size):
+    start_x, start_y = lattice_size // 2, lattice_size // 2
+    polymer = {0: (start_x, start_y)}  # Initialize with the first monomer
+    occupied = {polymer[0]}  # Set of occupied positions for quick lookup
+    
+    directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]  # Possible moves: right, left, up, down
+
+    for idx in range(1, length):
+        x, y = polymer[idx - 1]  # Get the last monomer's position
+        np.random.shuffle(directions)  # Randomize move order for variety
+        
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            
+            # Check lattice boundaries and avoid overlap
+            if (0 <= nx < lattice_size and 0 <= ny < lattice_size) and (nx, ny) not in occupied:
+                polymer[idx] = (nx, ny)  # Add the new monomer
+                occupied.add((nx, ny))  # Mark the position as occupied
+                break
+        else:
+            # If no valid moves, restart the chain
+            return generate_polymer_chain(length, lattice_size)
+    
+    return polymer
+
+def generate_new_config(polymer, lattice_size):
+    idx = np.random.choice(list(polymer.keys()))
+    x, y = polymer[idx]
+    
+    # Define possible moves
+    possible_moves = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+    np.random.shuffle(possible_moves)
+    
+    for nx, ny in possible_moves:
+        # Check lattice boundaries
+        if not (0 <= nx < lattice_size and 0 <= ny < lattice_size):
+            continue
+        
+        # Check overlap
+        if any(pos == (nx, ny) for pos in polymer.values()):
+            continue
+        
+        # Check connectivity
+        if idx > 0:  # Ensure it remains connected to the previous monomer
+            prev_x, prev_y = polymer[idx - 1]
+            if abs(nx - prev_x) + abs(ny - prev_y) != 1:
+                continue
+        if idx < len(polymer) - 1:  # Ensure it remains connected to the next monomer
+            next_x, next_y = polymer[idx + 1]
+            if abs(nx - next_x) + abs(ny - next_y) != 1:
+                continue
+        
+        # If all checks pass, apply the move
+        new_polymer = polymer.copy()
+        new_polymer[idx] = (nx, ny)
+        return new_polymer  # Return updated configuration
+    
+    # If no valid move, return the original configuration
+    return polymer
+    
+
+def dist(part1, part2):
     return np.sqrt((part1[0] - part2[0])**2 + (part1[1] - part2[1])**2)
 
 def avg_distance(parts):
@@ -108,7 +174,6 @@ def RDF(parts):
         for j in parts:
             if j!=i:
                 distance = dist(parts[i], parts[j])
-                # b.append(round(distance*2)/2)
                 b.append(distance)
         a+=b
     distance_count = [[x,a.count(x)/len(parts)] for x in set(a)]
@@ -137,18 +202,8 @@ def Helmholtz_free(E_arr,T):
     return -T*np.log(Z)
     
 def print_progress_bar(iteration, total, length=50):
-    """
-    Print iterations progress.
-    
-    Args:
-    iteration (int): Current iteration.
-    total (int): Total iterations.
-    length (int): Character length of the progress bar.
-    """
     percent = ("{0:.1f}").format(100 * (iteration / float(total)))  # Calculate percentage
     filled_length = int(length * iteration // total)  # Calculate filled part of the bar
     bar = '█' * filled_length + '-' * (length - filled_length)  # Create bar with '█' and '-'
     sys.stdout.write(f'\r|{bar}| {round(float(percent))}% Completed')
     sys.stdout.flush()
-    # if iteration == total: 
-    #     print()  # Print a new line on completion

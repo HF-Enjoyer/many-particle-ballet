@@ -3,6 +3,7 @@ __pycache__/
 #text files
 input.txt
 input.txt.out
+_out.txt
 #images
 *.png
 *.csv

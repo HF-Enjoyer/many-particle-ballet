@@ -1,6 +1,6 @@
+import numpy as np
 from functions import *
 
-import numpy as np
 import random
 from matplotlib import pyplot as plt
 from pathlib import Path
@@ -25,17 +25,15 @@ if __name__ == '__main__':
     i = 0
     energy_arr = []
 
-    # something like monte carlo 
-
     with open(f'{sys.argv[1].split(".")[0]}_out.txt', 'w') as outfile:
         outfile.write(f'INITIAL: {particles_init} \n')
         while i <= iterations:
             i += 1
-            part_rand = randomize_1particle(part_now, shp, Parts_num)
+            part_rand = generate_new_config(part_now, shp)
             if jump_estimator(part_now, part_rand, Temp, potential) == True:
                 outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
                 # part_now = part_rand
-                part_inter = smart_randomizer(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
+                part_inter = generate_polymer_chain(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
                 if jump_estimator(part_rand, part_inter, Temp, potential) == True:
                     outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter, potential)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp, potential)} \n')
                     part_now = part_inter
@@ -51,29 +49,7 @@ if __name__ == '__main__':
     print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
 
-    fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)
-
-    for i in particles_init.values():
-        ax[0].plot(i[0], i[1], 'o', color='red')
-        ax[0].set_ylim(0, shp+1)
-        ax[0].set_xlim(0, shp+1)
-        ax[0].set_title('Before MC')
-        ax[0].set_xticks(np.arange(0, shp+1, 1))
-        ax[0].set_yticks(np.arange(0, shp+1, 1))
-    for i in part_now.values():
-        ax[1].plot(i[0], i[1], 'o', color='red')
-        ax[1].set_ylim(0, shp+1)
-        ax[1].set_xlim(0, shp+1)
-        ax[1].set_title('After MC')
-        ax[1].set_xticks(np.arange(0, shp+1, 1))
-        ax[1].set_yticks(np.arange(0, shp+1, 1))
-    ax[0].grid()
-    ax[1].grid()
-    #plt.show()
-    plt.savefig('before-after.png', dpi=300, bbox_inches="tight")
-    plt.close()
-
-    print('Plotting energies...')
+    print('Plotting energy...')
     plt.plot(energy_arr, '-', color='black', linewidth=1.15)
     #print(len(energy_arr))
     plt.ylabel('Energy', fontsize=15)
@@ -93,25 +69,35 @@ if __name__ == '__main__':
     plt.savefig('part_distance.png', dpi=300, bbox_inches="tight")
     plt.close()
 
-    print('Calculating RDF...')
-    rdf_1 = []
-    rdf_2 = []
-    for i in RDF(particles_init):
-        rdf_1.append([float(i[0]),float(i[1])])
-    for i in RDF(part_now):
-        rdf_2.append([float(i[0]),float(i[1])])
-    rdf_1= sorted(rdf_1, key=lambda x: x[0])
-    rdf_2= sorted(rdf_2, key=lambda x: x[0])
-    x_1 = [x[0] for x in rdf_1]
-    y_1 = [x[1] for x in rdf_1]
-    x_2 = [x[0] for x in rdf_2]
-    y_2 = [x[1] for x in rdf_2]
-    plt.plot(x_1,y_1,color='b')
-    plt.plot(x_2,y_2,color='r')
-    plt.ylabel('RDF', fontsize=15)
-    plt.xlabel('Distance', fontsize=15)
-    #plt.show()
-    plt.legend(["Intitial", "Final"], loc="upper right")
-    plt.savefig('RDF.png', dpi=300, bbox_inches="tight")
-    plt.close()
-    print('RDF done!')
+    def plot_polymer_side_by_side(polymer1, polymer2,shp, title1="Initial Configuration", title2="Final Configuration"):
+        fig, axes = plt.subplots(1, 2, figsize=(12, 6))
+
+        # First plot
+        x1, y1 = zip(*polymer1.values())
+        axes[0].plot(x1, y1, '-o', markersize=8, color="blue", label="Polymer Chain")
+        axes[0].scatter(x1, y1, s=100, c="red", zorder=3, label="Monomers")
+        axes[0].set_title(title1)
+        axes[0].set_xlim(0,shp)
+        axes[0].set_ylim(0,shp)
+        axes[0].grid(True)
+        axes[0].legend()
+        axes[0].set_xticks(np.arange(0, shp+1, 1))
+        axes[0].set_yticks(np.arange(0, shp+1, 1))
+
+        # Second plot
+        x2, y2 = zip(*polymer2.values())
+        axes[1].plot(x2, y2, '-o', markersize=8, color="blue", label="Polymer Chain")
+        axes[1].scatter(x2, y2, s=100, c="red", zorder=3, label="Monomers")
+        axes[1].set_title(title2)
+        axes[1].set_xlim(0,shp)
+        axes[1].set_ylim(0,shp)
+        axes[1].grid(True)
+        axes[1].legend()
+        axes[1].set_xticks(np.arange(0, shp+1, 1))
+        axes[1].set_yticks(np.arange(0, shp+1, 1))
+        
+        plt.tight_layout()
+        plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
+        plt.close()
+    print('Plotting initial and final configurations...')
+    plot_polymer_side_by_side(particles_init,part_now,shp)
