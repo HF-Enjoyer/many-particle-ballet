@@ -1,4 +1,6 @@
-# Many Particle Disco 0.4.0
+# Many Particle Disco 0.5.0
+
+==NOW WITH POLYMERS!==
 
 Special thanks to my dearest friend Iaroslav Kutuzov (as known as Kusoslaw Intheforest).
 
@@ -25,9 +27,10 @@ py mc.py input.txt
 1. Number of particles N
 2. Lattice size (basically all the coordinates) - don't set too much. 10-50 is OK.
 3. Iterations. After this number of iterations the code stops. I recommend using 1000-20000 depending on N.
-4. Temperature(K). In the scale of this code 0.1 is low and 5K is extremely high. 
+4. Temperature (K). In the scale of this code 0.1 is low and 5K is extremely high. 
 5. Potentials. Currently there are two to choose from: inverse (which is a gravitational-like potential) and Lennard-Jones.
     The latter is set in the way that the depth of the well $\varepsilon=-5.0$, the $\sigma$ parameter is set so as to have $r_{min}=2^{1/6}\sigma=1$. Potentials are selected in the input file by the names `inverse` and `LJ`.
+6. Polymer parameter. `True` if you want to look at the polymer chain of length N, `False` if you want to look at the monoatomic gas. (see below)
 6. Coordinates. In this version just leave `random`.
 
 ### Outputs and useful data 
@@ -54,6 +57,8 @@ ACCEPT SHOOK? True
 
 ### Other scripts
 
+- Script **polymer_test.py** is a full-version of the **mc.py** with some additions regarding the before-after image plotting and no RDF calculation. 
+    TODO: merge **mc.py** and **polymer_test.py**
 - Script **meltdown.py** is a shortened version of the main code that has been used to "melt" the system by incremental increase in temperature parameter. There occurs something resembling phase transition at $T=2.1$ for the `inverse` potential (UPD: may be not true). `LJ` shows more promising results with melting.
 - File **bunch_runner.py** is a script to run simulations with increases in temperature
     TODO: take final configuration as a previous in the chain of simulations

@@ -18,6 +18,7 @@ if __name__ == '__main__':
     Temp = get_info(filename)['temp'] # temperature
     potential = get_info(filename)['potential'] # type of potential
     particles_init = get_info(filename)['configuration'] # initial configuration of the particles
+    polymer_true = get_info(filename)['polymer'] # polymer or single-particle system
     print('Starting energy', pot_calc(particles_init, potential), '\n')
 
     particle_distance = []
@@ -29,18 +30,7 @@ if __name__ == '__main__':
         outfile.write(f'INITIAL: {particles_init} \n')
         while i <= iterations:
             i += 1
-            part_rand = generate_new_config(part_now, shp)
-            if jump_estimator(part_now, part_rand, Temp, potential) == True:
-                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
-                # part_now = part_rand
-                part_inter = generate_polymer_chain(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
-                if jump_estimator(part_rand, part_inter, Temp, potential) == True:
-                    outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter, potential)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp, potential)} \n')
-                    part_now = part_inter
-                else:
-                    part_now = part_rand
-            else:
-                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
+            part_now = MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile)            
             particle_distance.append(avg_distance(part_now))
             energy_arr.append(pot_calc(part_now, potential)) 
             print_progress_bar(i, iterations)
@@ -95,7 +85,6 @@ if __name__ == '__main__':
         axes[1].legend()
         axes[1].set_xticks(np.arange(0, shp+1, 1))
         axes[1].set_yticks(np.arange(0, shp+1, 1))
-        
         plt.tight_layout()
         plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
         plt.close()

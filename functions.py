@@ -17,8 +17,8 @@ def get_info(filename: str):
     temp = float(info[3].split()[1]) # dimensionless
     potential = (info[4].split()[1]) #type of potential LJ or inverse
     coords = {}
-    polymer_true = (info[5].split()[1]) # polymer or free particles
-    if polymer_true == 'True':
+    polymer_true = eval((info[5].split()[1])) # polymer or free particles
+    if polymer_true == True:
         coords = generate_polymer_chain(Np, grid_size)
     else:
         if info[7] == 'random':
@@ -207,3 +207,32 @@ def print_progress_bar(iteration, total, length=50):
     bar = '█' * filled_length + '-' * (length - filled_length)  # Create bar with '█' and '-'
     sys.stdout.write(f'\r|{bar}| {round(float(percent))}% Completed')
     sys.stdout.flush()
+
+def MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile):
+    if polymer_true:
+            part_rand = generate_new_config(part_now, shp)
+            if jump_estimator(part_now, part_rand, Temp, potential) == True:
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
+                # part_now = part_rand
+                part_inter = generate_polymer_chain(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
+                if jump_estimator(part_rand, part_inter, Temp, potential) == True:
+                    outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter, potential)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp, potential)} \n')
+                    part_now = part_inter
+                else:
+                    part_now = part_rand
+            else:
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
+    else:
+            part_rand = randomize_1particle(part_now, shp, Parts_num)
+            if jump_estimator(part_now, part_rand, Temp, potential) == True:
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
+                # part_now = part_rand
+                part_inter = smart_randomizer(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
+                if jump_estimator(part_rand, part_inter, Temp, potential) == True:
+                    outfile.write(f'SHOOK: {part_inter} \nENERGY: {pot_calc(part_inter, potential)} \nACCEPT SHOOK? {jump_estimator(part_now, part_inter, Temp, potential)} \n')
+                    part_now = part_inter
+                else:
+                    part_now = part_rand
+            else:
+                outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
+    return part_now

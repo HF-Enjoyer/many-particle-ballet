@@ -1,0 +1,10 @@
+MPD 0.1.0
+Metropolis-Hastings algorithm, input and output files handling, core code
+MPD 0.2.0
+Temperatures > 0 handling
+MPD 0.3.0 
+Lennard-Jones potential
+MPD 0.4.0
+Polymer chains can now be simulated with the same interacting and energetic parameters as for monoatomic system
+MPD 0.5.0 
+Refactored the main code, MC_stepper now handles the polymer/monomer cases and finds a new set of coordinates
