@@ -58,12 +58,13 @@ ACCEPT SHOOK? True
 ### Other scripts
 
 - Script **polymer_test.py** is a copy of the **mc.py** with some additions regarding the before-after image plotting and no RDF calculation for polymer case.
- 
-    TODO: merge **mc.py** and **polymer_test.py**
 - Script **meltdown.py** is a shortened version of the main code that has been used to "melt" the system by incremental increase in temperature parameter. There occurs something resembling phase transition at $T=2.1$ for the `inverse` potential (UPD: may be not true). `LJ` shows more promising results with melting.
 - File **bunch_runner.py** is a script to run simulations with increases in temperature
-  
-    TODO: take final configuration as a previous in the chain of simulations
 - File **critical_analysis.py** is yet-to-be-tested-and-maybe-removed analyzer of the critical phenomena in the system
 
 Feel free to play with any of the parameters!
+
+TODO:
+- take final configuration as a previous in the chain of simulations
+- merge **mc.py** and **polymer_test.py**
+- revise the algorithm for polymers at T = 0 and find why they are getting stuck
