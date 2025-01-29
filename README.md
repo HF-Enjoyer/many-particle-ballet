@@ -7,6 +7,8 @@ Special thanks to my dearest friend Iaroslav Kutuzov (also known as Kusoslaw Int
 Metropolis algorithm and pairwise potential by *Ilya Mikhailov*.
 Temperature, RDF plot, average distance calculation, many bug fixes and valuable advice by *Iaroslav Kutuzov*.
 
+Read the article about this code [here](https://blog.sklad.observer/posts/2025-01-30-many-particle-ballet/).
+
 ## How to use this code
 
 This is a playful tackling of the problem that arose during the course on Statistical Thermodynamics a couple years back: there are two particles on the lattice that interact with some sort of potential. What are the properties of such system and how can we evaluate them?
