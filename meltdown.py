@@ -14,15 +14,13 @@ if __name__ == '__main__':
     iterations = get_info(filename)['iterations'] # number of iterations (test)
     shp = get_info(filename)['size'] # shape of the lattice
     Parts_num = get_info(filename)['N'] # number of particles
-    Temp = get_info(filename)['temp']
-    potential = get_info(filename)['potential']
-    particles_init = get_info(filename)['configuration']
-    # print('Starting energy', pot_calc(particles_init, potential), '\n')
-    
-    # coords_path = []
+    Temp = get_info(filename)['temp'] # temperature
+    potential = get_info(filename)['potential'] # type of potential
+    particles_init = get_info(filename)['configuration'] # initial configuration of the particles
+    polymer_true = get_info(filename)['polymer'] # condition whether the system is polymer or monoatomic 
+
     particle_distance = []
     part_now = particles_init
-    # coords_path.append(particles_init)
     i = 0
     energy_arr = []
 
@@ -30,23 +28,10 @@ if __name__ == '__main__':
 
     while i <= iterations:
         i += 1
-        part_rand = randomize_1particle(part_now, shp, Parts_num)
-        if jump_estimator(part_now, part_rand, Temp, potential) == True:
-            # part_now = part_rand
-            part_inter = smart_randomizer(Parts_num, shp) # intermediate check of random configuration being less in energy (to ensure faster convergence)
-            if jump_estimator(part_rand, part_inter, Temp, potential) == True:
-                part_now = part_inter
-            else:
-                part_now = part_rand
-  
+        part_now = MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile)            
         particle_distance.append(avg_distance(part_now))
         energy_arr.append(pot_calc(part_now, potential)) 
 
-
-
-    # print('Final Energy', pot_calc(part_now, potential), '\n')
-    # print('Montecarlo-ed!')
-    # print(len(particle_distance),len(energy_arr))
     avg_distance_tot = Average_value(particle_distance[1500:], energy_arr[1500:], Temp)
     helmholtz = Helmholtz_free(energy_arr[1500:], Temp)
     print(avg_distance_tot)

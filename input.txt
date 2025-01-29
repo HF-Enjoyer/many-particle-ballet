@@ -1,0 +1,8 @@
+N: 20
+grid_size: 10
+iterations: 4000
+temperature(K): 0
+potential: inverse
+polymer: False
+initial_coordinates:
+random

@@ -6,22 +6,23 @@ import time
 input_file = "input.txt"
 
 # Path to the consolidated output file
-output_file = "simulation_results_LJ.csv"
+output_file = "simulation_results_polymer_inverse.csv"
 
 # Base parameters for the input file
 base_input = {
     "N": 20,
     "grid_size": 10,
-    "iterations": 15000,
+    "iterations": 8000,
     "temperature(K)": 0,  # This will be updated for each simulation
-    "potential": "LJ",
+    "potential": "inverse",
+    "polymer": "True",
     "initial_coordinates": "random",
 }
 
 # Adjustable temperature range and step size
 temperature_min = 0  # Minimum temperature
 temperature_max = 4  # Maximum temperature
-temperature_step = 0.1  # Step size for temperature
+temperature_step = 0.3  # Step size for temperature
 
 # Generate the range of temperatures
 temperatures = [round(t, 2) for t in 
