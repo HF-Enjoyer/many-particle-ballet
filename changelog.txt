@@ -8,3 +8,5 @@ MPD 0.4.0
 Polymer chains can now be simulated with the same interacting and energetic parameters as for monoatomic system
 MPD 0.5.0 
 Refactored the main code, MC_stepper now handles the polymer/monomer cases and finds a new set of coordinates
+MPD 0.6.0 
+Added animation of system evolution using pygame, improved CLI interface
