@@ -1,6 +1,7 @@
 from collections import Counter
 import numpy as np
 import random
+import pygame
 from matplotlib import pyplot as plt
 from math import exp as exp
 import sys
@@ -236,3 +237,62 @@ def MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile)
             else:
                 outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
     return part_now
+
+def GUI_demonstrator(trajectory, shape):
+
+    L = shape  # Size of the lattice
+    particle_radius = 10  # Size of each particle in pixels
+    cell_size = 50
+    width, height = L * cell_size, L * cell_size  # Screen size
+
+    # Initialize Pygame
+    pygame.init()
+    screen = pygame.display.set_mode((width, height))
+    pygame.display.set_caption("Particle Simulation")
+
+    # Colors
+    WHITE = (255, 255, 255)
+    BLACK = (0, 0, 0)
+    RED = (255, 0, 0)
+    GRAY = (200, 200, 200)
+
+    def draw_grid():
+        for x in range(L):
+            pygame.draw.line(screen, GRAY, (x * cell_size, 0), (x * cell_size, height))
+        for y in range(L):
+            pygame.draw.line(screen, GRAY, (0, y * cell_size), (width, y * cell_size))
+
+    def draw_particles(particles):
+        for (x, y) in particles.values():
+            # Calculate the position of the vertex
+            pos_x = x * cell_size
+            pos_y = y * cell_size
+            pygame.draw.circle(screen, RED, (pos_x, pos_y), particle_radius)
+        pygame.display.flip()  # Update the display
+
+    def main():
+        clock = pygame.time.Clock()
+        running = True
+        i = 0
+        while i < len(trajectory):
+            print('Iteration', i)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    running = False  # Exit the loop when the user closes the window
+            screen.fill((0, 0, 0))
+            # Update particle positions (this is where your simulation logic would go)
+            # For demonstration, let's just move one particle
+            particles = trajectory[i]
+            draw_grid()
+
+            # Draw particles
+            draw_particles(particles)
+
+            # Control the frame rate (1 frame per second)
+            clock.tick(8)  # Decreased frame rate to 1 FPS
+            i += 1
+        # Clean up and quit
+        pygame.quit()
+        sys.exit()
+
+    main()

@@ -23,6 +23,7 @@ if __name__ == '__main__':
 
     particle_distance = []
     part_now = particles_init
+    trajectory = []
     i = 0
     energy_arr = []
 
@@ -36,6 +37,7 @@ if __name__ == '__main__':
             part_now = MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile)            
             particle_distance.append(avg_distance(part_now))
             energy_arr.append(pot_calc(part_now, potential)) 
+            trajectory.append(part_now)
             print_progress_bar(i, iterations)
 
 
@@ -43,67 +45,74 @@ if __name__ == '__main__':
     print('Final Energy', pot_calc(part_now, potential), '\n')
     print('Montecarlo-ed!')
 
-    fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)
+    print('Generate before-after images? Y/N')
+    if input()=='Y':
+        fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)
 
-    for i in particles_init.values():
-        ax[0].plot(i[0], i[1], 'o', color='red')
-        ax[0].set_ylim(0, shp+1)
-        ax[0].set_xlim(0, shp+1)
-        ax[0].set_title('Before MC')
-        ax[0].set_xticks(np.arange(0, shp+1, 1))
-        ax[0].set_yticks(np.arange(0, shp+1, 1))
-    for i in part_now.values():
-        ax[1].plot(i[0], i[1], 'o', color='red')
-        ax[1].set_ylim(0, shp+1)
-        ax[1].set_xlim(0, shp+1)
-        ax[1].set_title('After MC')
-        ax[1].set_xticks(np.arange(0, shp+1, 1))
-        ax[1].set_yticks(np.arange(0, shp+1, 1))
-    ax[0].grid()
-    ax[1].grid()
-    #plt.show()
-    plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
-    plt.close()
+        for i in particles_init.values():
+            ax[0].plot(i[0], i[1], 'o', color='red')
+            ax[0].set_ylim(0, shp+1)
+            ax[0].set_xlim(0, shp+1)
+            ax[0].set_title('Before MC')
+            ax[0].set_xticks(np.arange(0, shp+1, 1))
+            ax[0].set_yticks(np.arange(0, shp+1, 1))
+        for i in part_now.values():
+            ax[1].plot(i[0], i[1], 'o', color='red')
+            ax[1].set_ylim(0, shp+1)
+            ax[1].set_xlim(0, shp+1)
+            ax[1].set_title('After MC')
+            ax[1].set_xticks(np.arange(0, shp+1, 1))
+            ax[1].set_yticks(np.arange(0, shp+1, 1))
+        ax[0].grid()
+        ax[1].grid()
+        #plt.show()
+        plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
+        plt.close()
 
-    print('Plotting energies...')
-    plt.plot(energy_arr, '-', color='black', linewidth=1.15)
-    #print(len(energy_arr))
-    plt.ylabel('Energy', fontsize=15)
-    plt.xlabel('Monte-Carlo iterations', fontsize=15)
-    plt.grid()
-    #plt.show()
-    plt.savefig('energy.png', dpi=300, bbox_inches="tight")
-    plt.close()
+        print('Plotting energies...')
+        plt.plot(energy_arr, '-', color='black', linewidth=1.15)
+        #print(len(energy_arr))
+        plt.ylabel('Energy', fontsize=15)
+        plt.xlabel('Monte-Carlo iterations', fontsize=15)
+        plt.grid()
+        #plt.show()
+        plt.savefig('energy.png', dpi=300, bbox_inches="tight")
+        plt.close()
 
-    print('Plotting average distances...')
-    plt.plot(particle_distance, '-', color='black', linewidth=1.15)
-    #print(len(energy_arr))
-    plt.ylabel('Average distance', fontsize=15)
-    plt.xlabel('Monte-Carlo iterations', fontsize=15)
-    plt.grid()
-    #plt.show()
-    plt.savefig('part_distance.png', dpi=300, bbox_inches="tight")
-    plt.close()
+        print('Plotting average distances...')
+        plt.plot(particle_distance, '-', color='black', linewidth=1.15)
+        #print(len(energy_arr))
+        plt.ylabel('Average distance', fontsize=15)
+        plt.xlabel('Monte-Carlo iterations', fontsize=15)
+        plt.grid()
+        #plt.show()
+        plt.savefig('part_distance.png', dpi=300, bbox_inches="tight")
+        plt.close()
+    print('Generate RDF? Y/N')
+    if input()=='Y':
+        print('Calculating RDF...')
+        rdf_1 = []
+        rdf_2 = []
+        for i in RDF(particles_init):
+            rdf_1.append([float(i[0]),float(i[1])])
+        for i in RDF(part_now):
+            rdf_2.append([float(i[0]),float(i[1])])
+        rdf_1= sorted(rdf_1, key=lambda x: x[0])
+        rdf_2= sorted(rdf_2, key=lambda x: x[0])
+        x_1 = [x[0] for x in rdf_1]
+        y_1 = [x[1] for x in rdf_1]
+        x_2 = [x[0] for x in rdf_2]
+        y_2 = [x[1] for x in rdf_2]
+        plt.plot(x_1,y_1,color='b')
+        plt.plot(x_2,y_2,color='r')
+        plt.ylabel('RDF', fontsize=15)
+        plt.xlabel('Distance', fontsize=15)
+        #plt.show()
+        plt.legend(["Intitial", "Final"], loc="upper right")
+        plt.savefig('RDF.png', dpi=300, bbox_inches="tight")
+        plt.close()
+        print('RDF done!')
 
-    print('Calculating RDF...')
-    rdf_1 = []
-    rdf_2 = []
-    for i in RDF(particles_init):
-        rdf_1.append([float(i[0]),float(i[1])])
-    for i in RDF(part_now):
-        rdf_2.append([float(i[0]),float(i[1])])
-    rdf_1= sorted(rdf_1, key=lambda x: x[0])
-    rdf_2= sorted(rdf_2, key=lambda x: x[0])
-    x_1 = [x[0] for x in rdf_1]
-    y_1 = [x[1] for x in rdf_1]
-    x_2 = [x[0] for x in rdf_2]
-    y_2 = [x[1] for x in rdf_2]
-    plt.plot(x_1,y_1,color='b')
-    plt.plot(x_2,y_2,color='r')
-    plt.ylabel('RDF', fontsize=15)
-    plt.xlabel('Distance', fontsize=15)
-    #plt.show()
-    plt.legend(["Intitial", "Final"], loc="upper right")
-    plt.savefig('RDF.png', dpi=300, bbox_inches="tight")
-    plt.close()
-    print('RDF done!')
+    print('Show system evolution video? Y/N')
+    if input()=='Y':
+        GUI_demonstrator(trajectory, shp)
