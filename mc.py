@@ -115,4 +115,4 @@ if __name__ == '__main__':
 
     print('Show system evolution video? Y/N')
     if input()=='Y':
-        GUI_demonstrator(trajectory, shp)
+        GUI_demonstrator(trajectory, shp, polymer_true)

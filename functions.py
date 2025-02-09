@@ -238,12 +238,12 @@ def MC_stepper(shp, potential, Temp, Parts_num, part_now, polymer_true, outfile)
                 outfile.write(f'NEW: {part_rand} \nENERGY: {pot_calc(part_rand, potential)} \nJUMP? {jump_estimator(part_now, part_rand, Temp, potential)} \n')
     return part_now
 
-def GUI_demonstrator(trajectory, shape):
+def GUI_demonstrator(trajectory, shape, polymer_true):
 
     L = shape  # Size of the lattice
     particle_radius = 10  # Size of each particle in pixels
     cell_size = 50
-    width, height = L * cell_size, L * cell_size  # Screen size
+    width, height = (L+1) * cell_size, (L+1)* cell_size  # Screen size
 
     # Initialize Pygame
     pygame.init()
@@ -255,11 +255,11 @@ def GUI_demonstrator(trajectory, shape):
     BLACK = (0, 0, 0)
     RED = (255, 0, 0)
     GRAY = (200, 200, 200)
-
+    BLUE = (0,0,255)
     def draw_grid():
-        for x in range(L):
+        for x in range(L+1):
             pygame.draw.line(screen, GRAY, (x * cell_size, 0), (x * cell_size, height))
-        for y in range(L):
+        for y in range(L+1):
             pygame.draw.line(screen, GRAY, (0, y * cell_size), (width, y * cell_size))
 
     def draw_particles(particles):
@@ -269,7 +269,19 @@ def GUI_demonstrator(trajectory, shape):
             pos_y = y * cell_size
             pygame.draw.circle(screen, RED, (pos_x, pos_y), particle_radius)
         pygame.display.flip()  # Update the display
-
+    def draw_bonds(particles):
+        connection_order = list(particles.keys())
+        for i in range(len(connection_order) - 1):
+            key1 = connection_order[i]
+            key2 = connection_order[i + 1]
+            # Get the positions of the two particles
+            x1, y1 = particles[key1]
+            x2, y2 = particles[key2]
+            # Convert lattice coordinates to screen coordinates
+            pos1 = (x1 * cell_size, y1 * cell_size)
+            pos2 = (x2 * cell_size, y2 * cell_size)
+            # Draw a line between the two particles
+            pygame.draw.line(screen, BLUE, pos1, pos2, 2)
     def main():
         clock = pygame.time.Clock()
         running = True
@@ -284,7 +296,8 @@ def GUI_demonstrator(trajectory, shape):
             # For demonstration, let's just move one particle
             particles = trajectory[i]
             draw_grid()
-
+            if polymer_true:
+                draw_bonds(particles)        
             # Draw particles
             draw_particles(particles)
 
