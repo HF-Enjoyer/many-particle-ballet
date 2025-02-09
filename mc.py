@@ -68,7 +68,8 @@ if __name__ == '__main__':
         #plt.show()
         plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
         plt.close()
-
+    print('Plot energy and average distance graphs? Y/n')
+    if input()=='Y':
         print('Plotting energies...')
         plt.plot(energy_arr, '-', color='black', linewidth=1.15)
         #print(len(energy_arr))
