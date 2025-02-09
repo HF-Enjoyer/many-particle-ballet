@@ -53,8 +53,9 @@ SHOOK: {'part1': (3, 7), 'part2': (9, 5), 'part3': (9, 8), 'part4': (10, 3), 'pa
 ENERGY: -9.244309838550498 
 ACCEPT SHOOK? True 
 ```
-- You can observe the changes in the positions of particles on the picture **before_after.png**. Follow the CLI prompt.
+
 - The main script **mc.py** gathers data about the average distance between particles and stores it along with the energy of every step. They are then plotted on the graphs **part_distance.png** and **energy.png**. Follow the CLI prompt.
+- You can observe the changes in the positions of particles on the picture **before_after.png**. Follow the CLI prompt.
 - If you want to look at the radial distribution function for your system, you can look it up on the graph **RDF.png**. The initial and the final state are both plotted there. Follow the CLI prompt.
 - Starting ver 0.6.0 you can animate the evolution of the system (implemented with pygame). Follow the CLI prompt.
 
@@ -66,8 +67,3 @@ ACCEPT SHOOK? True
 - File **critical_analysis.py** is yet-to-be-tested-and-maybe-removed analyzer of the critical phenomena in the system
 
 Feel free to play with any of the parameters!
-
-TODO:
-- take final configuration as a previous in the chain of simulations
-- merge **mc.py** and **polymer_test.py**
-- revise the algorithm for polymers at T = 0 and find why they are getting stuck
