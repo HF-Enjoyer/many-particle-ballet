@@ -1,8 +1,8 @@
 N: 15
 grid_size: 10
 iterations: 250
-temperature(K): 5
+temperature(K): 0.5
 potential: inverse
-polymer: True
+polymer: False
 initial_coordinates:
 random
