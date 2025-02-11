@@ -48,23 +48,51 @@ if __name__ == '__main__':
     print('Generate before-after images? Y/N')
     if input()=='Y':
         fig, ax = plt.subplots(1, 2, figsize=(13, 6), sharey=True, sharex=False)
-
-        for i in particles_init.values():
-            ax[0].plot(i[0], i[1], 'o', color='red')
-            ax[0].set_ylim(0, shp+1)
-            ax[0].set_xlim(0, shp+1)
-            ax[0].set_title('Before MC')
+        if polymer_true:
+            title1="Before MC"
+            title2="After MC"
+            # First plot
+            x1, y1 = zip(*particles_init.values())
+            ax[0].plot(x1, y1, '-o', markersize=8, color="blue", label="Polymer Chain")
+            ax[0].scatter(x1, y1, s=100, c="red", zorder=3, label="Monomers")
+            ax[0].set_title(title1)
+            ax[0].set_xlim(0,shp)
+            ax[0].set_ylim(0,shp)
+            ax[0].grid(True)
+            ax[0].legend()
             ax[0].set_xticks(np.arange(0, shp+1, 1))
             ax[0].set_yticks(np.arange(0, shp+1, 1))
-        for i in part_now.values():
-            ax[1].plot(i[0], i[1], 'o', color='red')
-            ax[1].set_ylim(0, shp+1)
-            ax[1].set_xlim(0, shp+1)
-            ax[1].set_title('After MC')
+
+            # Second plot
+            x2, y2 = zip(*part_now.values())
+            ax[1].plot(x2, y2, '-o', markersize=8, color="blue", label="Polymer Chain")
+            ax[1].scatter(x2, y2, s=100, c="red", zorder=3, label="Monomers")
+            ax[1].set_title(title2)
+            ax[1].set_xlim(0,shp)
+            ax[1].set_ylim(0,shp)
+            ax[1].grid(True)
+            ax[1].legend()
             ax[1].set_xticks(np.arange(0, shp+1, 1))
             ax[1].set_yticks(np.arange(0, shp+1, 1))
-        ax[0].grid()
-        ax[1].grid()
+        else:
+            #first plot
+            for i in particles_init.values():
+                ax[0].plot(i[0], i[1], 'o', color='red')
+                ax[0].set_ylim(0, shp+1)
+                ax[0].set_xlim(0, shp+1)
+                ax[0].set_title('Before MC')
+                ax[0].set_xticks(np.arange(0, shp+1, 1))
+                ax[0].set_yticks(np.arange(0, shp+1, 1))
+            #second plot
+            for i in part_now.values():
+                ax[1].plot(i[0], i[1], 'o', color='red')
+                ax[1].set_ylim(0, shp+1)
+                ax[1].set_xlim(0, shp+1)
+                ax[1].set_title('After MC')
+                ax[1].set_xticks(np.arange(0, shp+1, 1))
+                ax[1].set_yticks(np.arange(0, shp+1, 1))
+            ax[0].grid()
+            ax[1].grid()
         #plt.show()
         plt.savefig('before_after.png', dpi=300, bbox_inches="tight")
         plt.close()

@@ -1,4 +1,4 @@
-# Many Particle Disco 0.6.0
+# Many Particle Disco 0.6.1
 
 > NOW WITH POLYMERS!
 
